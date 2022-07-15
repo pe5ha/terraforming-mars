@@ -67,6 +67,8 @@ import {IPathfindersData} from './pathfinders/IPathfindersData';
 import {AddResourcesToCard} from './deferredActions/AddResourcesToCard';
 import {isProduction} from './utils/server';
 import {ColonyDeserializer} from './colonies/ColonyDeserializer';
+import {sendTelegramPush} from './TelegramAPI';
+
 
 export interface Score {
   corporation: String;
@@ -399,6 +401,12 @@ export class Game {
     } else {
       game.gotoInitialResearchPhase();
     }
+
+    // telegram notice about game start +personal link
+    players.forEach((player) => {
+      const message = ', new game start! 🚀 Your link: '+process.env.HOST+'/player?id='+player.id;
+      sendTelegramPush(player, message);
+    });
 
     return game;
   }

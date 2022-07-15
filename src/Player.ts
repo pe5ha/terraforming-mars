@@ -160,6 +160,7 @@ export class Player {
     public color: Color,
     public beginner: boolean,
     public handicap: number = 0,
+    public telegramID: string = '',
     id: PlayerId) {
     this.id = id;
   }
@@ -169,8 +170,9 @@ export class Player {
     color: Color,
     beginner: boolean,
     handicap: number = 0,
+    telegramID: string = '',
     id: PlayerId): Player {
-    const player = new Player(name, color, beginner, handicap, id);
+    const player = new Player(name, color, beginner, handicap, telegramID, id);
     return player;
   }
 
@@ -2175,6 +2177,7 @@ export class Player {
       color: this.color,
       beginner: this.beginner,
       handicap: this.handicap,
+      telegramID: this.telegramID,
       timer: this.timer.serialize(),
       // Stats
       actionsTakenThisGame: this.actionsTakenThisGame,
@@ -2189,7 +2192,7 @@ export class Player {
   }
 
   public static deserialize(d: SerializedPlayer, game: SerializedGame): Player {
-    const player = new Player(d.name, d.color, d.beginner, Number(d.handicap), d.id);
+    const player = new Player(d.name, d.color, d.beginner, Number(d.handicap), d.telegramID, d.id);
     const cardFinder = new CardFinder();
 
     player.actionsTakenThisGame = d.actionsTakenThisGame;

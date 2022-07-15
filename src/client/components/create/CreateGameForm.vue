@@ -321,7 +321,10 @@
                                       <div :class="'form-group col6 create-game-player '+getPlayerContainerColorClass(newPlayer.color)">
                                           <div>
                                               <input class="form-input form-inline create-game-player-name" :placeholder="getPlayerNamePlaceholder(newPlayer)" v-model="newPlayer.name" />
+                                              <span>Start this bot: <a href="https://t.me/bot2047bot">t.me/bot2047bot</a > and send command /givemyid for ID.</span>
+                                              <input class="form-input form-inline create-game-player-name" :placeholder="'Telegram ID'" v-model="newPlayer.telegramID" />
                                           </div>
+
                                           <div class="create-game-page-color-row">
                                               <template v-for="color in ['Red', 'Green', 'Yellow', 'Blue', 'Black', 'Purple', 'Orange', 'Pink']">
                                                 <div v-bind:key="color">
@@ -502,14 +505,14 @@ export default (Vue as WithRefs<Refs>).extend({
       firstIndex: 1,
       playersCount: 1,
       players: [
-        {index: 1, name: '', color: Color.RED, beginner: false, handicap: 0, first: false},
-        {index: 2, name: '', color: Color.GREEN, beginner: false, handicap: 0, first: false},
-        {index: 3, name: '', color: Color.YELLOW, beginner: false, handicap: 0, first: false},
-        {index: 4, name: '', color: Color.BLUE, beginner: false, handicap: 0, first: false},
-        {index: 5, name: '', color: Color.BLACK, beginner: false, handicap: 0, first: false},
-        {index: 6, name: '', color: Color.PURPLE, beginner: false, handicap: 0, first: false},
-        {index: 7, name: '', color: Color.ORANGE, beginner: false, handicap: 0, first: false},
-        {index: 8, name: '', color: Color.PINK, beginner: false, handicap: 0, first: false},
+        {index: 1, name: '', color: Color.RED, beginner: false, handicap: 0, first: false, telegramID: ''},
+        {index: 2, name: '', color: Color.GREEN, beginner: false, handicap: 0, first: false, telegramID: ''},
+        {index: 3, name: '', color: Color.YELLOW, beginner: false, handicap: 0, first: false, telegramID: ''},
+        {index: 4, name: '', color: Color.BLUE, beginner: false, handicap: 0, first: false, telegramID: ''},
+        {index: 5, name: '', color: Color.BLACK, beginner: false, handicap: 0, first: false, telegramID: ''},
+        {index: 6, name: '', color: Color.PURPLE, beginner: false, handicap: 0, first: false, telegramID: ''},
+        {index: 7, name: '', color: Color.ORANGE, beginner: false, handicap: 0, first: false, telegramID: ''},
+        {index: 8, name: '', color: Color.PINK, beginner: false, handicap: 0, first: false, telegramID: ''},
       ],
       corporateEra: true,
       prelude: false,
