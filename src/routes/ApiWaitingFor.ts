@@ -1,5 +1,5 @@
 // @ts-ignore
-import fetch from 'node-fetch';
+// import fetch from 'node-fetch';
 import * as http from 'http';
 import {Handler} from './Handler';
 import {IContext} from './IHandler';
@@ -8,7 +8,7 @@ import {Player} from '../Player';
 import {WaitingForModel} from '../common/models/WaitingForModel';
 import {Game} from '../Game';
 import {isPlayerId, isSpectatorId} from '../common/Types';
-import {sendTelegramPush} from '../TelegramAPI';
+// import {sendTelegramPush} from '../TelegramAPI';
 
 export class ApiWaitingFor extends Handler {
   public static readonly INSTANCE = new ApiWaitingFor();
@@ -24,7 +24,7 @@ export class ApiWaitingFor extends Handler {
   // When player is undefined, caller is a spectator.
   private getPlayerWaitingForModel(player: Player, game: Game, gameAge: number, undoCount: number): WaitingForModel {
     if (this.timeToGo(player)) {
-      sendTelegramPush(player);
+      // sendTelegramPush(player);
       return {result: 'GO'};
     } else if (game.gameAge > gameAge || game.undoCount > undoCount) {
       return {result: 'REFRESH'};

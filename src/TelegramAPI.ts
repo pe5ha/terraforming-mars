@@ -3,6 +3,7 @@ import fetch from 'node-fetch';
 
 // sending push about player turns via telegram bot
 export function sendTelegramPush(player: Player, message: String = ', your turn! 🪐') {
+  if(!player.telegramID) return;
   const token = process.env.BOT_TOKEN;
   if (token) {
     const chat_id = player.telegramID;

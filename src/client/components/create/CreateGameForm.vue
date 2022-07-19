@@ -321,7 +321,7 @@
                                       <div :class="'form-group col6 create-game-player '+getPlayerContainerColorClass(newPlayer.color)">
                                           <div>
                                               <input class="form-input form-inline create-game-player-name" :placeholder="getPlayerNamePlaceholder(newPlayer)" v-model="newPlayer.name" />
-                                              <span>Start this bot: <a href="https://t.me/bot2047bot">t.me/bot2047bot</a > and send command /givemyid for ID.</span>
+                                              <span>Start this bot: <a href="https://t.me/terraforming_mars_bot">t.me/terraforming_mars_bot</a > and send command /givemyid for ID.</span>
                                               <input class="form-input form-inline create-game-player-name" :placeholder="'Telegram ID'" v-model="newPlayer.telegramID" />
                                           </div>
 

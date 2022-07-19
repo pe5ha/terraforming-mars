@@ -13,6 +13,7 @@ export class Timer {
   private startedAt: number = 0; // When was current time interval started
   private running: boolean = false; // Is the timer currently running
   private afterFirstAction: boolean = false; // Are we already after first action (First action time measure is currently skipped.)
+  private lastActionTime: number = 0; // Last input action time stamp. To avoid spam telegram push, when a player's new turn comes immediately after his input action
 
   private constructor(private clock: Clock) { }
 
@@ -48,6 +49,10 @@ export class Timer {
     // Timer is starting when previous timer was stopped. Normally it does not make any difference,
     // but this way undoing actions does not undo the timers.
     this.startedAt = Timer.lastStoppedAt === 0 ? this.clock.now() : Timer.lastStoppedAt;
+    // my >
+    let startedAtDate = new Date(this.startedAt);
+    console.log("startedAtDate: "+this.startedAt+" "+ startedAtDate.toISOString());
+    // my #
   }
 
   // stop() is called immediately when player performs new input action.
@@ -59,6 +64,15 @@ export class Timer {
       return;
     }
     this.sumElapsed += Timer.lastStoppedAt - this.startedAt;
+    // my >
+    this.lastActionTime = this.clock.now();
+    let stopedAtDate = new Date(this.lastActionTime);
+    console.log("lastStoppedAt: "+this.lastActionTime+" "+ stopedAtDate.toISOString());
+    // my #
+  }
+
+  public getLastStopDiff(): number{
+    return this.clock.now() - this.lastActionTime;
   }
 
   public getElapsed(): number {

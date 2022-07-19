@@ -66,6 +66,7 @@ import {ColoniesHandler} from './colonies/ColoniesHandler';
 import {SerializedGame} from './SerializedGame';
 import {MonsInsurance} from './cards/promo/MonsInsurance';
 import {InputResponse} from './common/inputs/InputResponse';
+import {sendTelegramPush} from './TelegramAPI';
 
 export class Player {
   public readonly id: PlayerId;
@@ -2100,7 +2101,15 @@ export class Player {
     return this.waitingFor;
   }
   public setWaitingFor(input: PlayerInput, cb: () => void = () => {}): void {
+    console.log(this.name+" =================");
     this.timer.start();
+    let timeDif = this.timer.getLastStopDiff();
+    console.log(timeDif);
+    const actionTimeDif =  process.env.ACTION_TIME_DIFF_MS == null ? 10000 : process.env.ACTION_TIME_DIFF_MS;
+    if(timeDif>actionTimeDif) sendTelegramPush(this);
+    // if(this.actionsTakenThisRound==0) sendTelegramPush(this);
+    // console.log("actionsTakenThisRound: "+this.actionsTakenThisRound);
+    // console.log("actionsTakenThisGame: "+this.actionsTakenThisGame);
     this.waitingFor = input;
     this.waitingForCb = cb;
   }
