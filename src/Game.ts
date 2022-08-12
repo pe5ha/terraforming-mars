@@ -68,6 +68,7 @@ import {GameLoader} from './database/GameLoader';
 import {DEFAULT_GAME_OPTIONS, GameOptions} from './GameOptions';
 import {ColoniesHandler} from './colonies/ColoniesHandler';
 import {TheNewSpaceRace} from './cards/pathfinders/TheNewSpaceRace';
+import {sendTelegramPush} from './TelegramAPI';
 
 export interface Score {
   corporation: String;
@@ -331,6 +332,12 @@ export class Game {
     } else {
       game.gotoInitialPhase();
     }
+
+    // telegram notice about game start +personal link
+    players.forEach((player) => {
+      const message = ', new game start! 🚀 Your link: '+process.env.HOST+'/player?id='+player.id;
+      sendTelegramPush(player, message);
+    });
 
     return game;
   }

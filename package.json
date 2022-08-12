@@ -36,6 +36,8 @@
     "@types/chai-as-promised": "^7.1.5",
     "@types/html-escaper": "^3.0.0",
     "@types/mocha": "^9.1.1",
+    "@types/node": "^18.7.2",
+    "@types/node-fetch": "^2.6.2",
     "@types/sinon": "^10.0.12",
     "@typescript-eslint/eslint-plugin": "^5.30.7",
     "@typescript-eslint/parser": "^5.30.7",

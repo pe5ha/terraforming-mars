@@ -61,6 +61,7 @@ export interface SerializedPlayer extends DeprecatedFields{
     titanium: number;
     titaniumProduction: number;
     titaniumValue: number;
+    telegramID: string;
     totalDelegatesPlaced: number;
     // TODO(kberg): change tradesThisTurn to tradeThisGeneration later
     tradesThisTurn: number;

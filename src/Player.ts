@@ -65,6 +65,7 @@ import {ColoniesHandler} from './colonies/ColoniesHandler';
 import {SerializedGame} from './SerializedGame';
 import {MonsInsurance} from './cards/promo/MonsInsurance';
 import {InputResponse} from './common/inputs/InputResponse';
+import {sendTelegramPush} from './TelegramAPI';
 
 // Behavior when playing a card.
 // add it to the tableau
@@ -167,6 +168,7 @@ export class Player {
     public color: Color,
     public beginner: boolean,
     public handicap: number = 0,
+    public telegramID: string = '',
     id: PlayerId) {
     this.id = id;
     // This seems pretty bad. The game will be set before the Player is actually
@@ -183,8 +185,9 @@ export class Player {
     color: Color,
     beginner: boolean,
     handicap: number = 0,
+    telegramID: string = '',
     id: PlayerId): Player {
-    const player = new Player(name, color, beginner, handicap, id);
+    const player = new Player(name, color, beginner, handicap, telegramID, id);
     return player;
   }
 
@@ -2114,7 +2117,15 @@ export class Player {
     return this.waitingFor;
   }
   public setWaitingFor(input: PlayerInput, cb: () => void = () => {}): void {
+    console.log(this.name+" =================");
     this.timer.start();
+    let timeDif = this.timer.getLastStopDiff();
+    console.log(timeDif);
+    const actionTimeDif =  process.env.ACTION_TIME_DIFF_MS == null ? 10000 : process.env.ACTION_TIME_DIFF_MS;
+    if(timeDif>actionTimeDif) sendTelegramPush(this);
+    // if(this.actionsTakenThisRound==0) sendTelegramPush(this);
+    // console.log("actionsTakenThisRound: "+this.actionsTakenThisRound);
+    // console.log("actionsTakenThisGame: "+this.actionsTakenThisGame);
     this.waitingFor = input;
     this.waitingForCb = cb;
   }
@@ -2194,6 +2205,7 @@ export class Player {
       color: this.color,
       beginner: this.beginner,
       handicap: this.handicap,
+      telegramID: this.telegramID,
       timer: this.timer.serialize(),
       // Stats
       actionsTakenThisGame: this.actionsTakenThisGame,
@@ -2208,7 +2220,7 @@ export class Player {
   }
 
   public static deserialize(d: SerializedPlayer, game: SerializedGame): Player {
-    const player = new Player(d.name, d.color, d.beginner, Number(d.handicap), d.id);
+    const player = new Player(d.name, d.color, d.beginner, Number(d.handicap), d.telegramID, d.id);
     const cardFinder = new CardFinder();
 
     player.actionsTakenThisGame = d.actionsTakenThisGame;
