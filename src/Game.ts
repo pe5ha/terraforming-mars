@@ -68,7 +68,7 @@ import {GameLoader} from './database/GameLoader';
 import {DEFAULT_GAME_OPTIONS, GameOptions} from './GameOptions';
 import {ColoniesHandler} from './colonies/ColoniesHandler';
 import {TheNewSpaceRace} from './cards/pathfinders/TheNewSpaceRace';
-import {sendTelegramPush} from './TelegramAPI';
+import {sendGameResultsInTelegramChats, sendTelegramNoticeGameStart} from './TelegramAPI';
 
 export interface Score {
   corporation: String;
@@ -333,10 +333,9 @@ export class Game {
       game.gotoInitialPhase();
     }
 
-    // telegram notice about game start +personal link
+    // Telegram notice about game start +personal link
     players.forEach((player) => {
-      const message = ', new game start! 🚀 Your link: '+process.env.HOST+'/player?id='+player.id;
-      sendTelegramPush(player, message);
+      sendTelegramNoticeGameStart(player);
     });
 
     return game;
@@ -1033,7 +1032,9 @@ export class Game {
       const corpname = player.corporations.length > 0 ? player.corporations[0].name : '';
       const vpb = player.getVictoryPoints();
       scores.push({corporation: corpname, playerScore: vpb.total});
+      // sendTelegramPush(player," game is end!");
     });
+    sendGameResultsInTelegramChats(this);
 
     Database.getInstance().saveGameResults(this.id, this.players.length, this.generation, this.gameOptions, scores);
     this.phase = Phase.END;

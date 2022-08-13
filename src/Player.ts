@@ -65,7 +65,7 @@ import {ColoniesHandler} from './colonies/ColoniesHandler';
 import {SerializedGame} from './SerializedGame';
 import {MonsInsurance} from './cards/promo/MonsInsurance';
 import {InputResponse} from './common/inputs/InputResponse';
-import {sendTelegramPush} from './TelegramAPI';
+import {sendTelegramNotice,deleteTelegramNotice} from './TelegramAPI';
 
 // Behavior when playing a card.
 // add it to the tableau
@@ -162,6 +162,9 @@ export class Player {
   public actionsTakenThisGame: number = 0;
   public victoryPointsByGeneration: Array<number> = [];
   public totalDelegatesPlaced: number = 0;
+
+  // Telegram
+  public lastNoticeMessageId: number | undefined;
 
   constructor(
     public name: string,
@@ -2107,6 +2110,8 @@ export class Player {
       this.timer.stop();
       this.runInput(input, waitingFor);
       waitingForCb();
+      // telegram delete notice
+      deleteTelegramNotice(this);
     } catch (err) {
       this.setWaitingFor(waitingFor, waitingForCb);
       throw err;
@@ -2117,15 +2122,13 @@ export class Player {
     return this.waitingFor;
   }
   public setWaitingFor(input: PlayerInput, cb: () => void = () => {}): void {
-    console.log(this.name+" =================");
     this.timer.start();
+
+    // telegram notice
     let timeDif = this.timer.getLastStopDiff();
-    console.log(timeDif);
     const actionTimeDif =  process.env.ACTION_TIME_DIFF_MS == null ? 10000 : process.env.ACTION_TIME_DIFF_MS;
-    if(timeDif>actionTimeDif) sendTelegramPush(this);
-    // if(this.actionsTakenThisRound==0) sendTelegramPush(this);
-    // console.log("actionsTakenThisRound: "+this.actionsTakenThisRound);
-    // console.log("actionsTakenThisGame: "+this.actionsTakenThisGame);
+    if(timeDif>actionTimeDif) sendTelegramNotice(this);
+
     this.waitingFor = input;
     this.waitingForCb = cb;
   }

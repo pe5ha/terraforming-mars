@@ -49,10 +49,10 @@ export class Timer {
     // Timer is starting when previous timer was stopped. Normally it does not make any difference,
     // but this way undoing actions does not undo the timers.
     this.startedAt = Timer.lastStoppedAt === 0 ? this.clock.now() : Timer.lastStoppedAt;
-    // my >
-    let startedAtDate = new Date(this.startedAt);
-    console.log("startedAtDate: "+this.startedAt+" "+ startedAtDate.toISOString());
-    // my #
+    // for telegram notice >
+    // let startedAtDate = new Date(this.startedAt);
+    // console.log("startedAtDate: "+this.startedAt+" "+ startedAtDate.toISOString());
+    // for telegram notice #
   }
 
   // stop() is called immediately when player performs new input action.
@@ -64,11 +64,12 @@ export class Timer {
       return;
     }
     this.sumElapsed += Timer.lastStoppedAt - this.startedAt;
-    // my >
+    
+    // for telegram notice >
     this.lastActionTime = this.clock.now();
-    let stopedAtDate = new Date(this.lastActionTime);
-    console.log("lastStoppedAt: "+this.lastActionTime+" "+ stopedAtDate.toISOString());
-    // my #
+    // let stopedAtDate = new Date(this.lastActionTime);
+    // console.log("lastStoppedAt: "+this.lastActionTime+" "+ stopedAtDate.toISOString());
+    
   }
 
   public getLastStopDiff(): number{
