@@ -1032,7 +1032,6 @@ export class Game {
       const corpname = player.corporations.length > 0 ? player.corporations[0].name : '';
       const vpb = player.getVictoryPoints();
       scores.push({corporation: corpname, playerScore: vpb.total});
-      // sendTelegramPush(player," game is end!");
     });
     sendGameResultsInTelegramChats(this);
 
