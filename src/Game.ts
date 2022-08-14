@@ -1033,6 +1033,7 @@ export class Game {
       const vpb = player.getVictoryPoints();
       scores.push({corporation: corpname, playerScore: vpb.total});
     });
+    // game results in telegram
     sendGameResultsInTelegramChats(this);
 
     Database.getInstance().saveGameResults(this.id, this.players.length, this.generation, this.gameOptions, scores);
