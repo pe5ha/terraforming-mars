@@ -65,7 +65,7 @@ import {ColoniesHandler} from './colonies/ColoniesHandler';
 import {SerializedGame} from './SerializedGame';
 import {MonsInsurance} from './cards/promo/MonsInsurance';
 import {InputResponse} from './common/inputs/InputResponse';
-import {sendTelegramNotice,deleteTelegramNotice} from './TelegramAPI';
+import {sendTelegramNotice,deleteTelegramNotice} from './TelegramBot';
 
 // Behavior when playing a card.
 // add it to the tableau
@@ -164,7 +164,7 @@ export class Player {
   public totalDelegatesPlaced: number = 0;
 
   // Telegram
-  public lastNoticeMessageId: number | undefined;
+  public lastNoticeMessageId: number = -1;
 
   constructor(
     public name: string,
@@ -2110,8 +2110,8 @@ export class Player {
       this.timer.stop();
       this.runInput(input, waitingFor);
       waitingForCb();
-      // telegram delete notice
-      deleteTelegramNotice(this);
+      // telegram delete previos notice (if the player has finishedhis moves)
+      if(!this.timer.isRunning()) deleteTelegramNotice(this);
     } catch (err) {
       this.setWaitingFor(waitingFor, waitingForCb);
       throw err;

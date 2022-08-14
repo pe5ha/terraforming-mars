@@ -76,6 +76,10 @@ export class Timer {
     return this.clock.now() - this.lastActionTime;
   }
 
+  public isRunning(){
+    return this.running;
+  }
+
   public getElapsed(): number {
     return this.sumElapsed + (this.running ? this.clock.now() - this.startedAt : 0);
   }

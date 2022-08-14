@@ -68,7 +68,7 @@ import {GameLoader} from './database/GameLoader';
 import {DEFAULT_GAME_OPTIONS, GameOptions} from './GameOptions';
 import {ColoniesHandler} from './colonies/ColoniesHandler';
 import {TheNewSpaceRace} from './cards/pathfinders/TheNewSpaceRace';
-import {sendGameResultsInTelegramChats, sendTelegramNoticeGameStart} from './TelegramAPI';
+import {sendGameResultsInTelegramChats, sendTelegramNoticeGameStart} from './TelegramBot';
 
 export interface Score {
   corporation: String;

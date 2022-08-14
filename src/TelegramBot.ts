@@ -14,7 +14,7 @@ export function sendGameResultsInTelegramChats(game: Game){
   let text = "";
   game.getPlayers().forEach((player)=>{
     text+=player.getVictoryPoints().total+" "+player.name+"%0A";
-    sendMessage(player.telegramID,", the game is over.");
+    sendMessage(player.telegramID, player.name+", the game is over.");
   });
 
   const chat_id = process.env.BOT_GROUP_CHAT_ID;
@@ -38,17 +38,18 @@ export function sendTelegramNotice(player: Player){
   const text = player.name + notice;
   const message = sendMessage(chat_id, text);
   message.then(function(data){
-    console.log(data);
     if(data.result.message_id) player.lastNoticeMessageId = data.result.message_id;
-    console.log(player.lastNoticeMessageId);
+    console.log(player.name+": lastNoticeMessageId = "+player.lastNoticeMessageId);
   });
 }
 
 export function deleteTelegramNotice(player: Player){
   if(!player.telegramID) return;
+  if(player.lastNoticeMessageId==-1) return;
   const chat_id = player.telegramID;
   const message_id = player.lastNoticeMessageId;
   deleteMessage(chat_id,message_id);
+  player.lastNoticeMessageId = -1;
 }
 
 async function sendMessage(chat_id: String|undefined, text: String|undefined){
@@ -58,10 +59,6 @@ async function sendMessage(chat_id: String|undefined, text: String|undefined){
     console.log(queryString);
     try {
       return (await fetch(queryString)).json();
-      // let resp = fetch(queryString);
-      // (await resp).json().then(function(data) {  
-      //   message = data.result;
-      // });
     } catch (e) {
     }
   }
