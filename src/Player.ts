@@ -76,6 +76,7 @@ import {LawSuit} from './cards/promo/LawSuit';
 import {CrashSiteCleanup} from './cards/promo/CrashSiteCleanup';
 import {AridorRebalanced} from './cards/rebalanced/rebalanced_corporation/AridorRebalanced';
 import {StormCraftIncorporatedRebalancedDeferredAction} from './deferredActions/StormCraftIncorporatedRebalancedDeferredAction';
+import {sendTelegramNotice,deleteTelegramNotice} from './TelegramBot';
 
 export type PlayerId = string;
 export type Password = string;
@@ -172,6 +173,10 @@ export class Player implements ISerializable<SerializedPlayer> {
   // Stats
   public endGenerationScores: Array<number> = [];
   public actionsTakenThisGame: number = 0;
+  // Telegram Bot
+  public lastNoticeMessageId: number = -1;
+
+
 
 
   constructor(
@@ -179,6 +184,7 @@ export class Player implements ISerializable<SerializedPlayer> {
     public color: Color,
     public beginner: boolean,
     public handicap: number = 0,
+    public telegramID: string = '',
     id: PlayerId) {
     this.id = id;
   }
@@ -188,8 +194,9 @@ export class Player implements ISerializable<SerializedPlayer> {
     color: Color,
     beginner: boolean,
     handicap: number = 0,
+    telegramID: string = '',
     id: PlayerId): Player {
-    const player = new Player(name, color, beginner, handicap, id);
+    const player = new Player(name, color, beginner, handicap, telegramID, id);
     return player;
   }
 
@@ -2191,6 +2198,8 @@ export class Player implements ISerializable<SerializedPlayer> {
       this.timer.stop();
       this.runInput(input, waitingFor);
       waitingForCb();
+      // telegram delete previos notice (if the player has finishedhis moves)
+      if(!this.timer.isRunning()) deleteTelegramNotice(this);
     } catch (err) {
       this.setWaitingFor(waitingFor, waitingForCb);
       throw err;
@@ -2202,6 +2211,12 @@ export class Player implements ISerializable<SerializedPlayer> {
   }
   public setWaitingFor(input: PlayerInput, cb: () => void = () => {}): void {
     this.timer.start();
+    // telegram notice [
+    let timeDif = this.timer.getLastStopDiff();
+    const actionTimeDif =  process.env.ACTION_TIME_DIFF_MS == null ? 10000 : process.env.ACTION_TIME_DIFF_MS;
+    if(timeDif>actionTimeDif) sendTelegramNotice(this);
+    //]
+  
     this.waitingFor = input;
     this.waitingForCb = cb;
   }
@@ -2306,6 +2321,7 @@ export class Player implements ISerializable<SerializedPlayer> {
       color: this.color,
       beginner: this.beginner,
       handicap: this.handicap,
+      telegramID: this.telegramID,
       timer: this.timer.serialize(),
       endGenerationScores: this.endGenerationScores ?? [],
       actionsTakenThisGame: this.actionsTakenThisGame,
@@ -2317,7 +2333,7 @@ export class Player implements ISerializable<SerializedPlayer> {
   }
 
   public static deserialize(d: SerializedPlayer): Player {
-    const player = new Player(d.name, d.color, d.beginner, Number(d.handicap), d.id);
+    const player = new Player(d.name, d.color, d.beginner, Number(d.handicap), d.telegramID, d.id);
     const cardFinder = new CardFinder();
     player.actionsTakenThisGame = d.actionsTakenThisGame;
     player.actionsTakenThisRound = d.actionsTakenThisRound;

@@ -64,4 +64,5 @@ export interface SerializedPlayer {
     tradesThisGeneration: number;
     hasTradedThisTurn: boolean;
     turmoilPolicyActionUsed: boolean;
+    telegramID: string;
 }

@@ -7,6 +7,8 @@ export class Timer implements ISerializable<SerializedTimer> {
   private running: boolean = false; // Is the timer currently running
   private afterFirstAction: boolean = false; // Are we already after first action (First action time measure is currently skipped.)
   private static lastStoppedAt: number = 0; // When was last time any Timer.stop() called
+  private lastActionTime: number = 0; // Last input action time stamp. To avoid spam telegram push, when a player's new turn comes immediately after his input action
+
 
   private constructor() { }
 
@@ -53,6 +55,20 @@ export class Timer implements ISerializable<SerializedTimer> {
       return;
     }
     this.sumElapsed += Timer.lastStoppedAt - this.startedAt;
+    
+    // for telegram notice [
+    this.lastActionTime = Date.now();
+    // ]
+    
+  }
+
+  // for telegram notice, return: how long has it been since the player's last action?
+  public getLastStopDiff(): number{
+    return Date.now() - this.lastActionTime;
+  }
+
+  public isRunning(){
+    return this.running;
   }
 
   public rebateTime(amountInSeconds: number): void {

@@ -75,6 +75,8 @@ import {AddResourcesToCard} from './deferredActions/AddResourcesToCard';
 import {AphroditeRebalanced} from './cards/rebalanced/rebalanced_corporation/AphroditeRebalanced';
 import {LogType} from './deferredActions/DrawCards';
 import {PartyName} from './turmoil/parties/PartyName';
+import {sendGameResultsInTelegramChats, sendTelegramNoticeGameStart} from './TelegramBot';
+
 
 export type GameId = string;
 export type SpectatorId = string;
@@ -437,6 +439,11 @@ export class Game implements ISerializable<SerializedGame> {
     } else {
       game.gotoInitialResearchPhase();
     }
+
+    // Telegram notice about game start +personal link
+    players.forEach((player) => {
+      sendTelegramNoticeGameStart(player);
+    });
 
     return game;
   }
@@ -1139,7 +1146,10 @@ export class Game implements ISerializable<SerializedGame> {
         dealtPreludes: player.dealtPreludeCards.map((prelude) => prelude.name),
         playerScore: vpb.total,
       });
+      // sendTelegramPush(player," game is end!");
     });
+    sendGameResultsInTelegramChats(this);
+  
 
     this.log('Final scores:');
     // TODO: Order players by score

@@ -48,6 +48,7 @@ export class GameHandler extends Handler {
             obj.color,
             obj.beginner,
             Number(obj.handicap), // For some reason handicap is coming up a string.
+            obj.telegramID,
             this.generateRandomId('p'),
           );
         });

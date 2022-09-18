@@ -59,7 +59,7 @@ export class GameSetup {
   }
 
   public static neutralPlayerFor(gameId: GameId): Player {
-    return new Player('neutral', Color.NEUTRAL, true, 0, gameId + '-neutral');
+    return new Player('neutral', Color.NEUTRAL, true, 0, '', gameId + '-neutral');
   }
 
   public static setupNeutralPlayer(game: Game) {
