@@ -1,5 +1,5 @@
-import {Player} from '@/Player';
-import {Game} from '@/Game';
+import {Player} from './Player';
+import {Game} from './Game';
 import fetch from 'node-fetch';
 
 // sending push about player turns via telegram bot
