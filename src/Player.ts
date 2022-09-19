@@ -2322,6 +2322,7 @@ export class Player implements ISerializable<SerializedPlayer> {
       beginner: this.beginner,
       handicap: this.handicap,
       telegramID: this.telegramID,
+      lastNoticeMessageId: this.lastNoticeMessageId,
       timer: this.timer.serialize(),
       endGenerationScores: this.endGenerationScores ?? [],
       actionsTakenThisGame: this.actionsTakenThisGame,
@@ -2335,6 +2336,8 @@ export class Player implements ISerializable<SerializedPlayer> {
   public static deserialize(d: SerializedPlayer): Player {
     const player = new Player(d.name, d.color, d.beginner, Number(d.handicap), d.telegramID, d.id);
     const cardFinder = new CardFinder();
+    player.lastNoticeMessageId = d.lastNoticeMessageId;
+    console.log("d.lastNoticeMessageId = "+d.lastNoticeMessageId);
     player.actionsTakenThisGame = d.actionsTakenThisGame;
     player.actionsTakenThisRound = d.actionsTakenThisRound;
     player.canUseHeatAsMegaCredits = d.canUseHeatAsMegaCredits;

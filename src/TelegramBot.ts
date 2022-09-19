@@ -32,7 +32,9 @@ export function sendTelegramNoticeGameStart(player: Player){
 
 // sending notice about player turns via telegram bot
 export function sendTelegramNotice(player: Player){
+  console.log("player.lastNoticeMessageId = "+player.lastNoticeMessageId);
   if(!player.telegramID) return;
+  if(player.lastNoticeMessageId!=-1) deleteTelegramNotice(player);
   const chat_id = player.telegramID;
   const notice = ', your turn! 🪐';
   const text = player.name + notice;
@@ -56,10 +58,12 @@ async function sendMessage(chat_id: String|undefined, text: String|undefined){
   const token = process.env.BOT_TOKEN;
   if (token) {
     const queryString = 'https://api.telegram.org/bot' + token + '/sendMessage?chat_id=' + chat_id + '&text=' + text;
+    const url = encodeURI(queryString);
     console.log(queryString);
     try {
-      return (await fetch(queryString)).json();
+      return (await fetch(url)).json();
     } catch (e) {
+      console.log(e);
     }
   }
   return null;
@@ -69,10 +73,12 @@ function deleteMessage(chat_id: String|undefined, message_id: number|undefined){
   const token = process.env.BOT_TOKEN;
   if (token) {
     const queryString = 'https://api.telegram.org/bot' + token + '/deleteMessage?chat_id=' + chat_id + '&message_id=' + message_id;
+    const url = encodeURI(queryString);
     console.log(queryString);
     try {
-      fetch(queryString);
+      fetch(url);
     } catch (e) {
+      console.log(e);
     }
   }
 }
