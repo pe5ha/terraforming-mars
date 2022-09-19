@@ -76,7 +76,7 @@ import {LawSuit} from './cards/promo/LawSuit';
 import {CrashSiteCleanup} from './cards/promo/CrashSiteCleanup';
 import {AridorRebalanced} from './cards/rebalanced/rebalanced_corporation/AridorRebalanced';
 import {StormCraftIncorporatedRebalancedDeferredAction} from './deferredActions/StormCraftIncorporatedRebalancedDeferredAction';
-import {sendTelegramNotice,deleteTelegramNotice} from './TelegramBot';
+import {sendTelegramNotice, deleteTelegramNotice} from './TelegramBot';
 
 export type PlayerId = string;
 export type Password = string;
@@ -175,8 +175,6 @@ export class Player implements ISerializable<SerializedPlayer> {
   public actionsTakenThisGame: number = 0;
   // Telegram Bot
   public lastNoticeMessageId: number = -1;
-
-
 
 
   constructor(
@@ -2199,7 +2197,7 @@ export class Player implements ISerializable<SerializedPlayer> {
       this.runInput(input, waitingFor);
       waitingForCb();
       // telegram delete previos notice (if the player has finishedhis moves)
-      if(!this.timer.isRunning()) deleteTelegramNotice(this);
+      if (!this.timer.isRunning()) deleteTelegramNotice(this);
     } catch (err) {
       this.setWaitingFor(waitingFor, waitingForCb);
       throw err;
@@ -2212,11 +2210,11 @@ export class Player implements ISerializable<SerializedPlayer> {
   public setWaitingFor(input: PlayerInput, cb: () => void = () => {}): void {
     this.timer.start();
     // telegram notice [
-    let timeDif = this.timer.getLastStopDiff();
-    const actionTimeDif =  process.env.ACTION_TIME_DIFF_MS == null ? 10000 : process.env.ACTION_TIME_DIFF_MS;
-    if(timeDif>actionTimeDif) sendTelegramNotice(this);
-    //]
-  
+    const timeDif = this.timer.getLastStopDiff();
+    const actionTimeDif = process.env.ACTION_TIME_DIFF_MS === undefined ? 10000 : process.env.ACTION_TIME_DIFF_MS;
+    if (timeDif>actionTimeDif) sendTelegramNotice(this);
+    // ]
+
     this.waitingFor = input;
     this.waitingForCb = cb;
   }
@@ -2337,7 +2335,7 @@ export class Player implements ISerializable<SerializedPlayer> {
     const player = new Player(d.name, d.color, d.beginner, Number(d.handicap), d.telegramID, d.id);
     const cardFinder = new CardFinder();
     player.lastNoticeMessageId = d.lastNoticeMessageId;
-    console.log("d.lastNoticeMessageId = "+d.lastNoticeMessageId);
+    console.log('d.lastNoticeMessageId = '+d.lastNoticeMessageId);
     player.actionsTakenThisGame = d.actionsTakenThisGame;
     player.actionsTakenThisRound = d.actionsTakenThisRound;
     player.canUseHeatAsMegaCredits = d.canUseHeatAsMegaCredits;

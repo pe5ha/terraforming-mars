@@ -1151,7 +1151,7 @@ export class Game implements ISerializable<SerializedGame> {
       // sendTelegramPush(player," game is end!");
     });
     sendGameResultsInTelegramChats(this);
-  
+
 
     this.log('Final scores:');
     // TODO: Order players by score

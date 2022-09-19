@@ -99,7 +99,7 @@ const defaultGameSetting: CreateGameModel = {
     {index: 6, name: '', color: Color.PURPLE, beginner: false, handicap: 0, first: false, telegramID: ''},
     {index: 7, name: '', color: Color.ORANGE, beginner: false, handicap: 0, first: false, telegramID: ''},
     {index: 8, name: '', color: Color.PINK, beginner: false, handicap: 0, first: false, telegramID: ''},
-],
+  ],
   corporateEra: true,
   prelude: false,
   draftVariant: true,

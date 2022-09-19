@@ -55,19 +55,18 @@ export class Timer implements ISerializable<SerializedTimer> {
       return;
     }
     this.sumElapsed += Timer.lastStoppedAt - this.startedAt;
-    
+
     // for telegram notice [
     this.lastActionTime = Date.now();
     // ]
-    
   }
 
   // for telegram notice, return: how long has it been since the player's last action?
-  public getLastStopDiff(): number{
+  public getLastStopDiff(): number {
     return Date.now() - this.lastActionTime;
   }
 
-  public isRunning(){
+  public isRunning() {
     return this.running;
   }
 
