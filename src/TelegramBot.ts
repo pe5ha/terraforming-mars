@@ -32,7 +32,6 @@ export function sendTelegramNoticeGameStart(player: Player){
 
 // sending notice about player turns via telegram bot
 export function sendTelegramNotice(player: Player){
-  console.log("player.lastNoticeMessageId = "+player.lastNoticeMessageId);
   if(!player.telegramID) return;
   if(player.lastNoticeMessageId!=-1) deleteTelegramNotice(player);
   const chat_id = player.telegramID;
@@ -42,6 +41,9 @@ export function sendTelegramNotice(player: Player){
   message.then(function(data){
     if(data.result.message_id) player.lastNoticeMessageId = data.result.message_id;
     console.log(player.name+": lastNoticeMessageId = "+player.lastNoticeMessageId);
+  
+    console.log("Saving game after Telegram notice-");
+    player.game.save(); // specially to save `player.lastNoticeMessageId` for pretty telegram notices >:)
   });
 }
 
