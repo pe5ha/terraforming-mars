@@ -44,6 +44,9 @@ export function sendTelegramNotice(player: Player) {
 
     console.log('Saving game after Telegram notice-');
     player.game.save(); // specially to save `player.lastNoticeMessageId` for pretty telegram notices >:)
+    // player.game.getPlayers().forEach((p) => {
+    //   if(p.timer.isRunning())
+    // });
   });
 }
 
